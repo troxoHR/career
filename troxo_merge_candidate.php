@@ -77,34 +77,34 @@ class PersonalSkills extends Skills
  */
 function merge(& $troxoTeam, Candidate $you)
 {
-    $backendSkills = new BackendSkills();
-    $frontendSkills = new FrontendSkills();
+	$backendSkills = new BackendSkills();
+	$frontendSkills = new FrontendSkills();
 	$fullStackSkills = new FullStackSkills();
 	$personalSkills = new PersonalSkills();
 
 	if (!($conditionOne = $backendSkills->checkSkill($you))) 
 	{
-        return false;
-    }
+	    return false;
+	}
 
 	if (!($conditionTwo = $frontendSkills->checkSkill($you))) 
 	{
-        return false;
-    }
-
-    if (!($conditionThree = $fullStackSkills->checkSkill($you)))
-    {
-        return false;
+	    return false;
 	}
-	
+
+	if (!($conditionThree = $fullStackSkills->checkSkill($you)))
+	{
+	    return false;
+	}
+
 	if (!($conditionFour = $personalSkills->checkSkill($you)))
-    {
-        return false;
-    }
+	{
+	    return false;
+	}
 
-    $troxoTeam[] = $you;
+	$troxoTeam[] = $you;
 
-    return true;
+	return true;
 }
 
 // Example of usage

@@ -18,42 +18,125 @@
 * @param array $troxoTeam, Candidate $you
 * @return boolean
 */
-merge(array $troxoTeam, Candidate $you) {
 
-	$backendSkills = array (‘php’,’.net’); 
+function merge(array $troxoTeam, Candidate $you) {
+
+	$backendSkills = array ('php','.net'); 
 	// @TODO skills could be a separate parent class while specific skills could be classes that inherit it
 	// checkSkill method could be implemented and inherited
 
-	$frontendSkills = array (‘html’, ‘css’); //array instancing backward compatible
+	$frontendSkills = array ('html', 'css', 'javascript'); //array instancing backward compatible
 
-	$fullStackSkills = array (‘javascript’);
+	If ( in_array($backendSkills, $you->return_skills()) ) {
+		$conditionOne = true;
+	} elseif ( $you->add_skills( array_diff( $backendSkills, $you->return_skills() ) ) ) {
+		$conditionOne = true;
+	} else {
+		$conditionOne = false;
+	}
 
-	$personalSkills = array (‘english language’,’hungry for knowledge’);
+	If ( array_intersect( $frontendSkills, $you->return_skills() ) == $frontendSkills ) {
+		$conditionTwo = true;
+	} elseif ( $you->add_skills( array_diff( $frontendSkills, $you->return_skills() ) ) ) {
+		$conditionTwo = true;
+	} else {
+		$conditionTwo = false;
+	}
 
-If (in_array(‘php’, $you.skills) or in_array(‘.net’ $you.skills)) {
-	$conditionOne = true;
-} 
-
-If (array_intersect($frontendSkills, $you.skills) == $frontendSkills)) {
-	$conditionTwo = true;
+	If ($conditionOne && $conditionTwo) {
+		$troxoTeam[] = $you;
+		return true;
+	} else {
+		return false;
+	}
 }
 
-//code duplication! These could be a separate function
-If (array_intersect($fullStackSkills, $you.skills) == $frontendSkills)) {
-	$conditionThree = true;
+
+class Candidate
+{
+	public $skills, $motivation, $skill_lvl, $name, $email; 
+
+	public function __construct($skills, $motivation, $skill_lvl, $name, $email)
+	{
+		$this->skills = $skills;
+		
+		if($motivation > 9000){
+			// its over 9000
+			$this->motivation = 9001;
+		} else {
+			// too low
+			$this->motivation = $motivation; 
+		}
+
+		$this->skill_lvl = $skill_lvl;
+		$this->name      = $name;
+		$this->email     = $email;
+	}
+
+	// ----------------------------------------------- <- this is how I separate each method or group so I can concentrate better; It's just easyer on my eyes
+	public function set_skills($skills)
+	{
+		$this->skills = $skills;
+	}
+
+	// -----------------------------------------------
+	public function return_skills()
+	{
+		return $this->skills;
+	}
+
+	public function return_motivation()
+	{
+		return $this->motivation;
+	}
+	// -----------------------------------------------
+	public function add_skills($new_skills)
+	{
+		if($new_skills)
+		{
+			foreach ($new_skills as $key => $one_new_skill) 
+			{
+				if( $this->can_skill_be_added() )
+				{
+					$this->skills[] = $one_new_skill; 
+				} else {
+					// well... :)
+				}
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function can_skill_be_added()
+	{
+		return true;
+	}
 }
 
-/* IT seems there is a more efficient way to go through these conditions */
 
-If ($conditionOne && $coditionTwo && $conditionThree) {
+// -----------------------------------------------------------------------------------------------------------
+// ----------------------------------------------- Driver code ----------------------------------------------- 
+// -----------------------------------------------------------------------------------------------------------
 
-	$troxoTeam[] = $you;
+// props setup
+$skills = ['php', 'html', 'css', 'javascript', 'python', 'photoshop', 'mysql'];
+$motivation = 374837432423456;
+$troxoTeam = [];
 
-	return true;
+// --- junk ---
+// subjective/self critical skill level => tech - in key value pairs (0, 10)
+$skill_lvl = ['php' => 7, 'html' => 4.1, 'css' => 2.1, 'javascript' => 2.5, 'python' => 1.9, 'photoshop' => 4, 'mysql' => 2.9];
+$name = 'Dimitrije Drakulić'; 
+$email = 'dimitrijedrakulic@gmail.com';
 
-} else {
+$you = new Candidate($skills, $motivation, $skill_lvl, $name, $email);
+var_dump( merge( $troxoTeam, $you));
 
-	return false;
-}
+
+// -----------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------- 
+// -----------------------------------------------------------------------------------------------------------
 
 ?>
